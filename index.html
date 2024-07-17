@@ -14,6 +14,8 @@
     <link href="assets/imgs/logo.png" rel="apple-touch-icon" />
     <link rel="stylesheet" href="assets/vendors/themify-icons/css/themify-icons.css">
 	<link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
    
@@ -341,19 +343,18 @@
 
     
 
- <!-- contact section -->
+<!-- contact section -->
 <section class="section" id="contact">
     <div class="container text-center">
         <p class="section-subtitle">How can you communicate?</p>
         <h6 class="section-title mb-5">Contact Me</h6>
-        <!-- contact form -->
-        <form action="contact.php" method="post" class="contact-form col-md-10 col-lg-8 m-auto">
+        <form id="contactForm" class="contact-form col-md-10 col-lg-8 m-auto">
             <div class="form-row">
                 <div class="form-group col-sm-6">
-                    <input type="text" name="name" class="form-control" placeholder="Your Name" required>                 
+                    <input type="text" name="name" id="name" class="form-control" placeholder="Your Name" required>                 
                 </div>
                 <div class="form-group col-sm-6">
-                    <input type="email" name="email" class="form-control" placeholder="Enter Email" required>                 
+                    <input type="email" name="email" id="email" class="form-control" placeholder="Enter Email" required>                 
                 </div>
                 <div class="form-group col-sm-12">
                     <textarea name="message" id="message" rows="6" class="form-control" placeholder="Write Something"></textarea>
@@ -362,9 +363,40 @@
                     <input type="submit" value="Send Message" class="btn btn-outline-primary rounded">                  
                 </div>
             </div>  
-        </form><!-- end of contact form -->
-    </div><!-- end of container -->
-</section><!-- end of contact section -->
+        </form>
+    </div>
+</section>
+
+<script>
+    document.getElementById('contactForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        var name = document.getElementById('name').value;
+        var email = document.getElementById('email').value;
+        var message = document.getElementById('message').value;
+
+        Email.send({
+            SecureToken: "your_secure_token_here",
+            To: 'loadywiseman@gmail.com',
+            From: email,
+            Subject: "New Contact Form Submission",
+            Body: "Name: " + name + "<br>Email: " + email + "<br>Message: " + message
+        }).then(
+            function(response) {
+                if (response == 'OK') {
+                    alert("Message sent successfully");
+                } else {
+                    throw new Error("Error: " + response);
+                }
+            }
+        ).catch(
+            function(error) {
+                console.error(error);
+                alert("There was an error sending the message. Please try again later.");
+            }
+        );
+    });
+</script>
 
 
 
